@@ -1,83 +1,35 @@
-#define FRAME_DURATION_MS 2     // 2ms
-unsigned long frameTime = 0;
-unsigned long frameCounter = 0;
-//---------------------------------------------------------------------------------
--------------------------------------------------------------
-void setup(void)
-{
-  Serial.begin(9600);
-  while(!Serial);
-  Serial.println("Ready");
-    
-}
-//---------------------------------------------------------------------------------
--------------------------------------------------------------
-void frame() {
-   
-   unsigned int slot = frameCounter % 10;
-   switch (slot) {
-     case 0: JobTask1();             JobTask3();               break;
-     case 1:             JobTask2();                           break;
-     case 2: JobTask1();                                       break;
-     case 3:                                     JobTask4();   break;
-     case 4:             JobTask2();                           break;
-     case 5: JobTask1();                                       break;
-     case 6:             JobTask2();                           break;
-     case 7: JobTask1();                                       break;
-     case 8: JobTask1();                                       break;
-     case 9:             JobTask2();                                 
-  }
-    
-}
-//---------------------------------------------------------------------------------
--------------------------------------------------------------
-void loop(void) // Single time slot function of the Cyclic Executive (repeating)
-{
-  // uncomment this to find execution time of given tasks 
-  /*
-  unsigned long bT = micros();
-  for (int i=0; i<1000; i++) {
-    JobTask1();
-  }
-  unsigned long timeItTook = micros()-bT;
-  Serial.print("Duration SerialOutput Job = ");
-  Serial.print(timeItTook);
-  exit(0);
-  */
+
+
+int OUT1 = 6;                                                                 // Pin 6 on the arduino is set as an output, this is the output of specification 1. (Square wave)
+
+
+
+
+
+void setup() {                                                                // Code setup, initialises components
+
+  pinMode(OUT1, OUTPUT);                                                      // Sets the pin mode of pin 6, this sets it up as an output 
   
-  frame();
-  // TO-DO: wait the next frame  
+  
 }
-//---------------------------------------------------------------------------------
--------------------------------------------------------------
-// Fake tasks
-//---------------------------------------------------------------------------------
--------------------------------------------------------------
-// Task 1, takes 0.9ms
-void JobTask1(void) 
-{
-   monitor.jobStarted(1);
-   delayMicroseconds(900); 
-   monitor.jobEnded(1);
-} 
-// Task 2, takes 1.8ms
-void JobTask2(void) 
-{
-   monitor.jobStarted(2);
-   delayMicroseconds(1800);
-   monitor.jobEnded(2); 
-} 
-// Task 3, takes 1ms
-void JobTask3(void) 
-{
-   monitor.jobStarted(3);
-   delayMicroseconds(1000);
-   monitor.jobEnded(3); 
-} 
-// Task 4, takes 2ms
-void JobTask4(void) 
-{
-   monitor.jobStarted(4);
-   delayMicroseconds(2000);
-   monitor.jobEnded(4); 
+
+
+void loop () {                                                                // Main loop. This piece of code loops forever 
+  Spec1();                                                                    // Calls the function "Spec1"
+
+
+
+}
+
+
+int Spec1(){                                                                  // This is the function for Specification 1, which generates a digital signal that is high for 200us, low for 50us, then high again for 30us. This repeats every 4 ms
+  digitalWrite(OUT1, HIGH);                                                   // digitalWrite writes a digital value to pin 6, in this case it is high 
+  delayMicroseconds(200);                                                     // Delay. The code will wait X value before going to the next step, in this case it waits 200 microseconds
+  digitalWrite(OUT1, LOW);                                                    // digitalWrite writes a digital value to pin 6, in this case it is low 
+  delayMicroseconds(50);                                                      // Delay. The code will wait X value before going to the next step, in this case it waits 50 microseconds
+  digitalWrite(OUT1, HIGH);                                                   // digitalWrite writes a digital value to pin 6, in this case it is high 
+  delayMicroseconds(30);                                                      // Delay. The code will wait X value before going to the next step, in this case it waits 30 microseconds
+  digitalWrite(OUT1, LOW);                                                    // digitalWrite writes a digital value to pin 6, in this case it is low
+  delayMicroseconds(3720);                                                    // Delay. The code will wait X value before going to the next step, in this case it waits 3720 microseconds
+
 }
